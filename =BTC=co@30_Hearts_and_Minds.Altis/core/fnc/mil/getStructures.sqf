@@ -1,6 +1,6 @@
 
 /* ----------------------------------------------------------------------------
-Function: btc_fnc_mil_getStructures
+Function: btc_mil_fnc_getStructures
 
 Description:
     Fill me when you edit me !
@@ -13,7 +13,7 @@ Returns:
 
 Examples:
     (begin example)
-        _result = [] call btc_fnc_mil_getStructures;
+        _result = [] call btc_mil_fnc_getStructures;
     (end)
 
 Author:
@@ -26,11 +26,10 @@ params [
     ["_radius", 100, [0]]
 ];
 
-private _cfgVehicles = configFile >> "CfgVehicles";
-private _structures = (nearestTerrainObjects [_pos, ["House", "BUNKER", "FORTRESS"], _radius]) select {getText(_cfgVehicles >> typeOf _x >> "editorSubcategory") isEqualTo "EdSubcat_Military"};
+private _structures = (nearestTerrainObjects [_pos, ["House", "BUNKER", "FORTRESS"], _radius]) select {getText(configOf _x >> "editorSubcategory") isEqualTo "EdSubcat_Military"};
 
 private _useful = _structures select {(
-    !((_x buildingPos -1) isEqualTo []) &&
+    (_x buildingPos -1) isNotEqualTo [] &&
     {damage _x isEqualTo 0}
 )};
 

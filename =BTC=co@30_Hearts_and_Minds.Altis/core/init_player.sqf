@@ -6,7 +6,7 @@ if !(isNil "btc_custom_loc") then {
         _location setText _cityName;
     } forEach btc_custom_loc;
 };
-btc_intro_done = [] spawn btc_fnc_intro;
+btc_intro_done = [] spawn btc_respawn_fnc_intro;
 
 [{!isNull player}, {
     [] call compileScript ["core\doc.sqf"];
@@ -25,7 +25,7 @@ btc_intro_done = [] spawn btc_fnc_intro;
     [] call btc_int_fnc_shortcuts;
 
     if (player getVariable ["interpreter", false]) then {
-        player createDiarySubject ["btc_diarylog", localize "STR_BTC_HAM_CON_INFO_ASKHIDEOUT_DIARYLOG"];
+        player createDiarySubject ["btc_diarylog", localize "STR_BTC_HAM_CON_INFO_ASKHIDEOUT_DIARYLOG", '\A3\ui_f\data\igui\cfg\simpleTasks\types\talk_ca.paa'];
     };
 
     switch (btc_p_autoloadout) do {
@@ -38,6 +38,8 @@ btc_intro_done = [] spawn btc_fnc_intro;
         default {
         };
     };
+
+    [] call btc_respawn_fnc_screen;
 
     if (btc_debug) then {
         onMapSingleClick "vehicle player setPos _pos";

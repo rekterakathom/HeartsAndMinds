@@ -27,12 +27,12 @@ params [
 private _useful = btc_city_all select {
     !isNull _x &&
     _x getVariable ["occupied", false] &&
-    !((_x getVariable ["type", ""]) in ["NameLocal", "Hill", "NameMarine"])
+    !((_x getVariable ["type", ""]) in ["NameLocal", "Hill", "NameMarine", "StrongpointArea"])
 };
 if (_useful isEqualTo []) exitWith {[] spawn btc_side_fnc_create;};
 private _city = selectRandom _useful;
 
-[_taskID, 36, [objNull, getPos _city] select (btc_p_spect), _city getVariable "name"] call btc_task_fnc_create;
+[_taskID, 36, [objNull, _city] select (btc_p_spect), _city getVariable "name"] call btc_task_fnc_create;
 
 _city setVariable ["spawn_more", true];
 
@@ -76,7 +76,7 @@ for "_i" from 0 to (1 + round random 2) do {
         if (random 1 > 0.5) then {
             private _direction = random 360;
             private _statics = btc_type_gl + btc_type_mg;
-            [_pos getPos [5, _direction], _statics, _direction] call btc_mil_fnc_create_static;
+            [_pos getPos [5, _direction], _statics, _direction, [], _city] call btc_mil_fnc_create_static;
         };
     };
 
@@ -106,11 +106,7 @@ for "_i" from 0 to (1 + round random 2) do {
             [_destroy_taskID, "SUCCEEDED"] call BIS_fnc_taskSetState;
             private _fx = "test_EmptyObjectForSmoke" createVehicle _pos;
             _fx setPos _pos;
-            [{
-                params ["_fx"];
-
-                _fx call CBA_fnc_deleteEntity;
-            }, [_fx], 120] call CBA_fnc_waitAndExecute;
+            [CBA_fnc_deleteEntity, [_fx], 120] call CBA_fnc_waitAndExecute;
             btc_spect_emp deleteAt (btc_spect_emp find _box);
             publicVariable "btc_spect_emp";
         } else {

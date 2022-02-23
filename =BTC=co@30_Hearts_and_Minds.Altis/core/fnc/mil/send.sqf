@@ -8,7 +8,7 @@ Description:
 Parameters:
     _start - Starting point. [Object]
     _dest - Destination. [Array, Object]
-    _typeOf_patrol - Infantry or motorized. [String]
+    _typeOf_patrol - Infantry or motorized. [Number]
     _veh_type - Vehicle type for motorized. [String]
     _infFormation - Define the infantry formation. [String]
 
@@ -39,14 +39,10 @@ private _group = grpNull;
 private _delay = 0;
 switch (_typeOf_patrol) do {
     case 0 : {
-        _group = ([_pos, 150, 3 + round random 6, 1] call btc_mil_fnc_create_group) select 0;
-        _group setVariable ["no_cache", true];
-        [_group] call CBA_fnc_clearWaypoints;
+        _group = ([_pos, 150, 3 + round random 6, "PATROL"] call btc_mil_fnc_create_group) select 0;
     };
     case 1 : {
         _group = createGroup btc_enemy_side;
-        _group setVariable ["no_cache", true];
-        [_group] call CBA_fnc_clearWaypoints;
 
         if (_veh_type isEqualTo "") then {_veh_type = selectRandom btc_type_motorized};
         private _return_pos = [_pos, 10, 500, 13, false] call btc_fnc_findsafepos;
@@ -54,10 +50,13 @@ switch (_typeOf_patrol) do {
         _delay = [_group, _return_pos, _veh_type] call btc_mil_fnc_createVehicle;
     };
 };
+_group setVariable ["no_cache", true];
+_group setVariable ["acex_headless_blacklist", true];
 
 [{
     params ["_group", "_typeOf_patrol", "_dest", "_infFormation"];
 
+    [_group] call CBA_fnc_clearWaypoints;
     switch (_typeOf_patrol) do {
         case 0 : {
             [_group, _dest, -1, "MOVE", "AWARE", "RED", "FULL", _infFormation, "(group this) call btc_data_fnc_add_group;", nil, 60] call CBA_fnc_addWaypoint;
@@ -67,9 +66,8 @@ switch (_typeOf_patrol) do {
         };
     };
 
-    [[_group]] call btc_fnc_set_groupsOwner;
-
+    _group setVariable ["acex_headless_blacklist", false];
     _group deleteGroupWhenEmpty true;
-}, [_group, _typeOf_patrol, _dest, _infFormation], btc_delay_time + _delay] call CBA_fnc_waitAndExecute;
+}, [_group, _typeOf_patrol, _dest, _infFormation], _delay] call btc_delay_fnc_waitAndExecute;
 
 _group

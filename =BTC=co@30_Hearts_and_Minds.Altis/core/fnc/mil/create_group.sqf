@@ -3,24 +3,23 @@
 Function: btc_mil_fnc_create_group
 
 Description:
-    Fill me when you edit me !
+    Create a group of enemies with the corresponding waypoint.
 
 Parameters:
-    _city - [Number]
-    _area - [Number]
-    _n - [Number]
-    _wp - [Array]
-    _type_divers - [Array]
-    _type_units - [Boolean]
-    _p_sea - [Side]
-    _enemy_side - [Array]
-    _wp_ratios - []
+    _city - City to patrol around. [Object]
+    _area - Area to patrol around. [Number]
+    _n - Number of enemies to create inside the group. [Number]
+    _wp - Type of wp: in "HOUSE", "PATROL" or "SENTRY". [String]
+    _type_divers - Type of diver list. [Array]
+    _type_units - Type of units list. [Array]
+    _p_sea - Allow spawn in water. [Boolean]
+    _enemy_side - Side of the enemie. [Side]
 
 Returns:
 
 Examples:
     (begin example)
-        [player, 50, 1, (btc_p_mil_wp_ratios#0) - 0.1] call btc_mil_fnc_create_group;
+        [player, 50, 1, "PATROL"] call btc_mil_fnc_create_group;
     (end)
 
 Author:
@@ -32,23 +31,21 @@ params [
     ["_city", objNull, [objNull, []]],
     ["_area", 300, [0]],
     ["_n", 0, [0]],
-    ["_wp", 0, [0]],
+    ["_wp", "PATROL", [""]],
     ["_type_divers", btc_type_divers, [[]]],
     ["_type_units", btc_type_units, [[]]],
     ["_p_sea", btc_p_sea, [true]],
-    ["_enemy_side", btc_enemy_side, [east]],
-    ["_wp_ratios", btc_p_mil_wp_ratios, [[]]]
+    ["_enemy_side", btc_enemy_side, [east]]
 ];
-_wp_ratios params ["_wp_house_probability", "_wp_sentry_probability"];
 
 private _pos = [_city call CBA_fnc_getPos, _area, _p_sea] call btc_fnc_randomize_pos;
 private _group_structure = [1, objNull];
-if (_wp <= _wp_house_probability) then { // Find building
+if (_wp isEqualTo "HOUSE") then { // Find building
     ([_pos, _n] call btc_mil_fnc_getBuilding) params ["_numberOfGroup", "_structure"];
     if (_structure isNotEqualTo objNull) then {
         _group_structure = [_numberOfGroup, _structure];
     } else {
-        _wp = _wp_sentry_probability; // Handle the case there is no building
+        _wp = "PATROL"; // Handle the case there is no building
     };
 };
 
@@ -79,19 +76,23 @@ for "_i" from 1 to _numberOfGroup do {
         _group setVariable ["btc_city", _city];
     };
 
-    switch (true) do {
-        case (_wp <= _wp_house_probability) : {
+    switch (_wp) do {
+        case ("HOUSE") : {
             _n = 1;
-            [_group, _structure] call btc_fnc_house_addWP;
+            [[_group, _structure], btc_fnc_house_addWP] call btc_delay_fnc_exec;
             _group setVariable ["btc_inHouse", typeOf _structure];
         };
-        case (_wp > _wp_house_probability && _wp <= _wp_sentry_probability) : {
+        case ("PATROL") : {
             [{
                 params ["_group", "_hashMapGroup", "_area"];
-                [_group, _hashMapGroup get "_pos", _area, 2 + floor (random 4), "MOVE", "SAFE", "RED", "LIMITED", "STAG COLUMN", "", [5, 10, 20]] call CBA_fnc_taskPatrol;
+                [
+                    _group, _hashMapGroup get "_pos", _area,
+                    2 + floor (random 4), "MOVE", "SAFE", "RED",
+                    "LIMITED", "STAG COLUMN", "", [5, 10, 20]
+                ] remoteExecCall ["CBA_fnc_taskPatrol", groupOwner _group];
             }, [_group, _hashMapGroup, _area], btc_delay_time] call CBA_fnc_waitAndExecute;
         };
-        case (_wp > _wp_sentry_probability) : {
+        case ("SENTRY") : {
             [_group] call CBA_fnc_clearWaypoints;
             [{
                 params ["_group", "_hashMapGroup"];
@@ -103,7 +104,7 @@ for "_i" from 1 to _numberOfGroup do {
 };
 
 if (btc_debug_log) then {
-    [format ["_this = %1 ; POS %2 UNITS N %3 _wp_ratios %4", _this, _pos, _n, _wp_ratios], __FILE__, [false]] call btc_debug_fnc_message;
+    [format ["_this = %1 ; POS %2 UNITS N %3", _this, _pos, _n], __FILE__, [false]] call btc_debug_fnc_message;
 };
 
 _groups

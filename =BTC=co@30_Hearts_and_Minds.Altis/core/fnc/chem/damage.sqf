@@ -59,6 +59,14 @@ if (
     };
 };
 if (
+    isPlayer _unit &&
+    {_protection isEqualTo 0}
+) then {
+    if (_unit getVariable ["ace_medical_pain", 0] < 0.9) then {
+        [_unit, 0.01] call ace_medical_fnc_adjustPainLevel;
+    };
+};
+if (
     [
         "B_SCBA_01_base_F",
         "B_CombinationUnitRespirator_01_Base_F"
@@ -67,13 +75,13 @@ if (
     _protection = _protection + 0.1;
 };
 if (_uniform isNotEqualTo "") then {
-    _protection = _protection + 0.5;
+    _protection = _protection + 0.4;
     if (
         [
             "cbrn"
         ] findIf {_x in _uniform} > -1
     ) then {
-        _protection = _protection + 0.1;
+        _protection = _protection + 0.2;
     };
 };
 

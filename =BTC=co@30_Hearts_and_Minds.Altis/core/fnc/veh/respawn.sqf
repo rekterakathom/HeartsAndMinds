@@ -7,8 +7,7 @@ Description:
 
 Parameters:
     _vehicle - Vehicle object. [Object]
-    _killer - Killer. [Object]
-    _instigator - Person who pulled the trigger. [Object]
+    _serialisedVeh - Serialised vehicle. [Object]
 
 Returns:
 
@@ -24,22 +23,18 @@ Author:
 
 params [
     ["_vehicle", objNull, [objNull]],
-    ["_killer", objNull, [objNull]],
-    ["_instigator", objNull, [objNull]]
+    ["_serialisedVeh", [], [[]]]
 ];
 
-private _data = _vehicle getVariable ["data_respawn", []];
-_data pushBack (_vehicle getVariable ["btc_EDENinventory", []]);
+btc_veh_respawnable deleteAt (btc_veh_respawnable find _vehicle);
 
+crew _vehicle call btc_fnc_moveOut;
 [{
-    params [
-        "_vehicle",
-        "_data",
-        ["_helo", btc_helo, [[]]]
-    ];
+    crew (_this select 0) isEqualTo []
+}, {
+    params ["_vehicle", "_serialisedVeh"];
 
-    deleteVehicle _vehicle;
-    _helo deleteAt (_helo find _vehicle);
+    _vehicle call CBA_fnc_deleteEntity;
 
     [{
         params [
@@ -67,18 +62,12 @@ _data pushBack (_vehicle getVariable ["btc_EDENinventory", []]);
             createVehicleCrew _vehicle;
         };
 
-        [_vehicle, _customization, _isMedicalVehicle, _isRepairVehicle, _fuelSource, _pylons, _isContaminated, _supplyVehicle] call btc_fnc_setVehProperties;
+        [_vehicle, _customization, _isMedicalVehicle, _isRepairVehicle, _fuelSource, _pylons, _isContaminated, _supplyVehicle] call btc_veh_fnc_propertiesSet;
         if (_EDENinventory isNotEqualTo []) then {
             _vehicle setVariable ["btc_EDENinventory", _EDENinventory];
             [_vehicle, _EDENinventory] call btc_log_fnc_inventorySet;
         };
 
         [_vehicle, _time] call btc_veh_fnc_addRespawn;
-    }, _data, 1] call CBA_fnc_waitAndExecute;
-}, [_vehicle, _data], _data select 3] call CBA_fnc_waitAndExecute;
-
-if (isServer) then {
-    [btc_rep_malus_veh_killed, _instigator] call btc_rep_fnc_change;
-} else {
-    [btc_rep_malus_veh_killed, _instigator] remoteExecCall ["btc_rep_fnc_change", 2];
-};
+    }, _serialisedVeh, 2] call CBA_fnc_waitAndExecute;
+}, [_vehicle, _serialisedVeh]] call CBA_fnc_waitUntilAndExecute;

@@ -1,5 +1,12 @@
 /////////////////////SERVER\\\\\\\\\\\\\\\\\\\\\
 if (isServer) then {
+    //BODY
+    btc_body_fnc_bagRecover_s = compileScript ["core\fnc\body\bagRecover_s.sqf"];
+    btc_body_fnc_createMarker = compileScript ["core\fnc\body\createMarker.sqf"];
+    btc_body_fnc_dogtagGet = compileScript ["core\fnc\body\dogtagGet.sqf"];
+    btc_body_fnc_dogtagSet = compileScript ["core\fnc\body\dogtagSet.sqf"];
+    btc_body_fnc_setBodyBag = compileScript ["core\fnc\body\setBodyBag.sqf"];
+
     //CACHE
     btc_cache_fnc_find_pos = compileScript ["core\fnc\cache\find_pos.sqf"];
     btc_cache_fnc_create = compileScript ["core\fnc\cache\create.sqf"];
@@ -18,11 +25,9 @@ if (isServer) then {
     btc_fnc_deleteEntities = compileScript ["core\fnc\common\deleteEntities.sqf"];
     btc_fnc_final_phase = compileScript ["core\fnc\common\final_phase.sqf"];
     btc_fnc_findPosOutsideRock = compileScript ["core\fnc\common\findposoutsiderock.sqf"];
-    btc_fnc_set_groupsOwner = compileScript ["core\fnc\common\set_groupsOwner.sqf"];
     btc_fnc_typeOf = compileScript ["core\fnc\common\typeOf.sqf"];
-    btc_fnc_getVehProperties = compileScript ["core\fnc\common\getVehProperties.sqf"];
-    btc_fnc_setVehProperties = compileScript ["core\fnc\common\setVehProperties.sqf"];
     btc_fnc_roof = compileScript ["core\fnc\common\roof.sqf"];
+    btc_fnc_moveOut = compileScript ["core\fnc\common\moveOut.sqf"];
 
     //CHEM
     btc_chem_fnc_checkLoop = compileScript ["core\fnc\chem\checkLoop.sqf"];
@@ -42,9 +47,9 @@ if (isServer) then {
     btc_city_fnc_cleanUp = compileScript ["core\fnc\city\cleanUp.sqf"];
     btc_city_fnc_trigger_free_condition = compileScript ["core\fnc\city\trigger_free_condition.sqf"];
     btc_city_fnc_getHouses = compileScript ["core\fnc\city\getHouses.sqf"];
+    btc_city_fnc_send = compileScript ["core\fnc\city\send.sqf"];
 
     //CIV
-    btc_civ_fnc_add_weapons = compileScript ["core\fnc\civ\add_weapons.sqf"];
     btc_civ_fnc_add_grenade = compileScript ["core\fnc\civ\add_grenade.sqf"];
     btc_civ_fnc_get_weapons = compileScript ["core\fnc\civ\get_weapons.sqf"];
     btc_civ_fnc_get_grenade = compileScript ["core\fnc\civ\get_grenade.sqf"];
@@ -65,15 +70,18 @@ if (isServer) then {
     btc_db_fnc_saveObjectStatus = compileScript ["core\fnc\db\saveObjectStatus.sqf"];
     btc_db_fnc_loadCargo = compileScript ["core\fnc\db\loadcargo.sqf"];
     btc_db_fnc_autoRestart = compileScript ["core\fnc\db\autoRestart.sqf"];
+    btc_db_fnc_setTurretMagazines = compileScript ["core\fnc\db\setTurretMagazines.sqf"];
 
     //DELAY
     btc_delay_fnc_createUnit = compileScript ["core\fnc\delay\createUnit.sqf"];
     btc_delay_fnc_createVehicle = compileScript ["core\fnc\delay\createVehicle.sqf"];
     btc_delay_fnc_createAgent = compileScript ["core\fnc\delay\createAgent.sqf"];
     btc_delay_fnc_exec = compileScript ["core\fnc\delay\exec.sqf"];
+    btc_delay_fnc_waitAndExecute = compileScript ["core\fnc\delay\waitAndExecute.sqf"];
 
     //DOOR
     btc_door_fnc_lock = compileScript ["core\fnc\door\lock.sqf"];
+    btc_door_fnc_get = compileScript ["core\fnc\door\get.sqf"];
 
     //EH
     btc_eh_fnc_server = compileScript ["core\fnc\eh\server.sqf"];
@@ -149,6 +157,12 @@ if (isServer) then {
     btc_rep_fnc_explosives_defuse = compileScript ["core\fnc\rep\explosives_defuse.sqf"];
     btc_rep_fnc_notify = compileScript ["core\fnc\rep\notify.sqf"];
     btc_rep_fnc_killed = compileScript ["core\fnc\rep\killed.sqf"];
+    btc_rep_fnc_wheelChange = compileScript ["core\fnc\rep\wheelChange.sqf"];
+
+    //RESPAWN
+    btc_respawn_fnc_addTicket = compileScript ["core\fnc\respawn\addTicket.sqf"];
+    btc_respawn_fnc_playerConnected = compileScript ["core\fnc\respawn\playerConnected.sqf"];
+    btc_respawn_fnc_player = compileScript ["core\fnc\respawn\player.sqf"];
 
     //SIDE
     btc_side_fnc_create = compileScript ["core\fnc\side\create.sqf"];
@@ -170,6 +184,7 @@ if (isServer) then {
     btc_side_fnc_chemicalLeak = compileScript ["core\fnc\side\chemicalLeak.sqf"];
     btc_side_fnc_EMP = compileScript ["core\fnc\side\EMP.sqf"];
     btc_side_fnc_removeRubbish = compileScript ["core\fnc\side\removeRubbish.sqf"];
+    btc_side_fnc_pandemic = compileScript ["core\fnc\side\pandemic.sqf"];
 
     //TAG
     btc_tag_fnc_initArea = compileScript ["core\fnc\tag\initArea.sqf"];
@@ -178,13 +193,10 @@ if (isServer) then {
 
     //LOG
     btc_log_fnc_createVehicle = compileScript ["core\fnc\log\createVehicle.sqf"];
-    btc_log_fnc_getRearmMagazines = compileScript ["core\fnc\log\getRearmMagazines.sqf"];
     btc_log_fnc_init = compileScript ["core\fnc\log\init.sqf"];
     btc_log_fnc_inventorySet = compileScript ["core\fnc\log\inventorySet.sqf"];
     btc_log_fnc_server_delete = compileScript ["core\fnc\log\server_delete.sqf"];
     btc_log_fnc_create_s = compileScript ["core\fnc\log\create_s.sqf"];
-    btc_log_fnc_get_cc = compileScript ["core\fnc\log\get_cc.sqf"];
-    btc_log_fnc_get_rc = compileScript ["core\fnc\log\get_rc.sqf"];
     btc_log_fnc_server_repair_wreck = compileScript ["core\fnc\log\server_repair_wreck.sqf"];
     btc_log_fnc_inventoryGet = compileScript ["core\fnc\log\inventoryGet.sqf"];
 
@@ -203,6 +215,9 @@ if (isServer) then {
     btc_veh_fnc_addRespawn = compileScript ["core\fnc\veh\addRespawn.sqf"];
     btc_veh_fnc_killed = compileScript ["core\fnc\veh\killed.sqf"];
     btc_veh_fnc_respawn = compileScript ["core\fnc\veh\respawn.sqf"];
+    btc_veh_fnc_propertiesGet = compileScript ["core\fnc\veh\propertiesGet.sqf"];
+    btc_veh_fnc_propertiesSet = compileScript ["core\fnc\veh\propertiesSet.sqf"];
+    btc_veh_fnc_add = compileScript ["core\fnc\veh\add.sqf"];
 };
 
 /////////////////////CLIENT AND SERVER\\\\\\\\\\\\\\\\\\\\\
@@ -211,7 +226,6 @@ if (isServer) then {
 btc_cache_fnc_hd = compileScript ["core\fnc\cache\hd.sqf"];
 
 //COMMON
-btc_fnc_find_veh_with_turret = compileScript ["core\fnc\common\find_veh_with_turret.sqf"];
 btc_fnc_get_class = compileScript ["core\fnc\common\get_class.sqf"];
 btc_fnc_randomize_pos = compileScript ["core\fnc\common\randomize_pos.sqf"];
 btc_fnc_getHouses = compileScript ["core\fnc\common\getHouses.sqf"];
@@ -220,19 +234,24 @@ btc_fnc_house_addWP_loop = compileScript ["core\fnc\common\house_addWP_loop.sqf"
 //CHEM
 btc_chem_fnc_damage = compileScript ["core\fnc\chem\damage.sqf"];
 btc_chem_fnc_deconShowerAnimLarge = {(_this select 0) setVariable ["BIN_Shower_Stop",false]; _this call BIN_fnc_deconShowerAnimLarge;};
+btc_chem_fnc_damageLoop = compileScript ["core\fnc\chem\damageLoop.sqf"];
+
+//DOOR
+btc_door_fnc_broke = compileScript ["core\fnc\door\broke.sqf"];
 
 //DEBUG
 btc_debug_fnc_message = compileScript ["core\fnc\debug\message.sqf"];
 
-//DB
-btc_db_fnc_add_veh = compileScript ["core\fnc\db\add_veh.sqf"];
-
 //EH
 btc_eh_fnc_trackItem = compileScript ["core\fnc\eh\trackItem.sqf"];
+
+//FLAG
+btc_flag_fnc_int = compileScript ["core\fnc\flag\int.sqf"];
 
 //CIV
 btc_civ_fnc_class = compileScript ["core\fnc\civ\class.sqf"];
 btc_civ_fnc_addWP = compileScript ["core\fnc\civ\addWP.sqf"];
+btc_civ_fnc_add_weapons = compileScript ["core\fnc\civ\add_weapons.sqf"];
 
 //IED
 btc_ied_fnc_belt = compileScript ["core\fnc\ied\belt.sqf"];
@@ -260,16 +279,21 @@ btc_rep_fnc_foodRemoved = compileScript ["core\fnc\rep\foodRemoved.sqf"];
 //ARSENAL
 btc_arsenal_fnc_ammoUsage = compileScript ["core\fnc\arsenal\ammoUsage.sqf"];
 
+//TOW
+btc_tow_fnc_int = compileScript ["core\fnc\tow\int.sqf"];
+
 //VEH
 btc_veh_fnc_init = compileScript ["core\fnc\veh\init.sqf"];
 
 /////////////////////CLIENT\\\\\\\\\\\\\\\\\\\\\
 if (!isDedicated) then {
+    //BODY
+    btc_body_fnc_bagRecover = compileScript ["core\fnc\body\bagRecover.sqf"];
+
     //COMMON
     btc_fnc_end_mission = compileScript ["core\fnc\common\end_mission.sqf"];
     btc_fnc_get_cardinal = compileScript ["core\fnc\common\get_cardinal.sqf"];
     btc_fnc_show_hint = compileScript ["core\fnc\common\show_hint.sqf"];
-    btc_fnc_intro = compileScript ["core\fnc\common\intro.sqf"];
     btc_fnc_set_markerTextLocal = compileScript ["core\fnc\common\set_markerTextLocal.sqf"];
     btc_fnc_showSubtitle = compileScript ["core\fnc\common\showSubtitle.sqf"];
     btc_fnc_get_composition = compileScript ["core\fnc\common\get_composition.sqf"];
@@ -278,7 +302,6 @@ if (!isDedicated) then {
 
     //CHEM
     btc_chem_fnc_biopsy = compileScript ["core\fnc\chem\biopsy.sqf"];
-    btc_chem_fnc_damageLoop = compileScript ["core\fnc\chem\damageLoop.sqf"];
     btc_chem_fnc_ehDetector = compileScript ["core\fnc\chem\ehDetector.sqf"];
     btc_chem_fnc_updateDetector = compileScript ["core\fnc\chem\updateDetector.sqf"];
 
@@ -294,7 +317,6 @@ if (!isDedicated) then {
 
     //DOOR
     btc_door_fnc_break = compileScript ["core\fnc\door\break.sqf"];
-    btc_door_fnc_broke = compileScript ["core\fnc\door\broke.sqf"];
 
     //IED
     btc_ied_fnc_effects = compileScript ["core\fnc\ied\effects.sqf"];
@@ -309,6 +331,9 @@ if (!isDedicated) then {
     btc_eh_fnc_CuratorObjectPlaced = compileScript ["core\fnc\eh\CuratorObjectPlaced.sqf"];
     btc_eh_fnc_player = compileScript ["core\fnc\eh\player.sqf"];
 
+    //FLAG
+    btc_flag_fnc_deploy = compileScript ["core\fnc\flag\deploy.sqf"];
+
     //FOB
     btc_fob_fnc_create = compileScript ["core\fnc\fob\create.sqf"];
     btc_fob_fnc_rallypointAssemble = compileScript ["core\fnc\fob\rallypointAssemble.sqf"];
@@ -321,6 +346,9 @@ if (!isDedicated) then {
     btc_int_fnc_shortcuts = compileScript ["core\fnc\int\shortcuts.sqf"];
     btc_int_fnc_terminal = compileScript ["core\fnc\int\terminal.sqf"];
     btc_int_fnc_foodGive = compileScript ["core\fnc\int\foodGive.sqf"];
+    btc_int_fnc_ordersLoop = compileScript ["core\fnc\int\ordersLoop.sqf"];
+    btc_int_fnc_checkSirenBeacons = compileScript ["core\fnc\int\checkSirenBeacons.sqf"];
+    btc_int_fnc_horn = compileScript ["core\fnc\int\horn.sqf"];
 
     //INFO
     btc_info_fnc_ask = compileScript ["core\fnc\info\ask.sqf"];
@@ -353,9 +381,15 @@ if (!isDedicated) then {
     btc_log_fnc_copy = compileScript ["core\fnc\log\copy.sqf"];
     btc_log_fnc_paste = compileScript ["core\fnc\log\paste.sqf"];
     btc_log_fnc_refuelSource = compileScript ["core\fnc\log\refuelSource.sqf"];
+    btc_log_fnc_rearmSource = compileScript ["core\fnc\log\rearmSource.sqf"];
 
     //REP
     btc_rep_fnc_treatment = compileScript ["core\fnc\rep\treatment.sqf"];
+
+    //RESPAWN
+    btc_respawn_fnc_screen = compileScript ["core\fnc\respawn\screen.sqf"];
+    btc_respawn_fnc_force = compileScript ["core\fnc\respawn\force.sqf"];
+    btc_respawn_fnc_intro = compileScript ["core\fnc\respawn\intro.sqf"];
 
     //SPECT
     btc_spect_fnc_updateDevice = compileScript ["core\fnc\spect\updateDevice.sqf"];

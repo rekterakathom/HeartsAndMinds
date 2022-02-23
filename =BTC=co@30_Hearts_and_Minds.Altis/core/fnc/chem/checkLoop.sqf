@@ -35,7 +35,7 @@ private _bodyParts = ["head","body","hand_l","hand_r","leg_l","leg_r"];
     } forEach allUnitsUAV;
     private _units = allUnits - _allUnitsUAV;
     private _objtToDecontaminate = [];
-    private _unitsContaminated = _contaminated select {_x in _units};
+    private _unitsContaminated = _contaminated arrayIntersect _units;
     {
         (0 boundingBoxReal _x) params ["_p1", "_p2"];
         private _maxWidth = abs ((_p2 select 0) - (_p1 select 0));
@@ -69,12 +69,13 @@ private _bodyParts = ["head","body","hand_l","hand_r","leg_l","leg_r"];
     private _unitContaminate = [];
     {
         if (_x in _units) then {
-            _range = _range / 2;
+            _range = _range / 1.5;
         };
         _unitContaminate append (_units inAreaArray [ASLToAGL getPosASL _x, _range, _range, 0, false, 2]);
     } forEach _contaminated;
 
     if (_unitContaminate isEqualTo []) exitWith {};
+
     private _periode = 3 / count _unitContaminate;
     {
         private _notAlready = _contaminated pushBackUnique _x > -1;
@@ -82,9 +83,7 @@ private _bodyParts = ["head","body","hand_l","hand_r","leg_l","leg_r"];
             publicVariable "btc_chem_contaminated";
         };
         if (local _x) then {
-            [{
-                _this call btc_chem_fnc_damage;
-            }, [_x, _notAlready, _bodyParts, _cfgGlasses], _forEachIndex * _periode] call CBA_fnc_waitAndExecute;
+            [btc_chem_fnc_damage, [_x, _notAlready, _bodyParts, _cfgGlasses], _forEachIndex * _periode] call CBA_fnc_waitAndExecute;
         } else {
             if (_notAlready) then {
                 [_x] remoteExecCall ["btc_chem_fnc_damageLoop", _x];

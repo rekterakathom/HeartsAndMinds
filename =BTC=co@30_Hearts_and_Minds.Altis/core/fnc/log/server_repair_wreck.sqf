@@ -22,7 +22,7 @@ Author:
 
 params [
     ["_veh", objNull, [objNull]],
-    ["_blacklist", btc_helo, [[]]]
+    ["_blacklist", btc_veh_respawnable, [[]]]
 ];
 
 if (_veh in _blacklist) exitWith {
@@ -33,8 +33,13 @@ private _type = typeOf _veh;
 (getPosASL _veh) params ["_x", "_y", "_z"];
 private _dir = getDir _veh;
 private _marker = _veh getVariable ["marker", ""];
-private _vehProperties = [_veh] call btc_fnc_getVehProperties;
+private _vehProperties = _veh call btc_veh_fnc_propertiesGet;
+
+// Reset properties
 _vehProperties set [5, false];
+(_vehProperties select 3) set [0, getNumber (configOf _veh >> "ace_refuel_fuelCargo")];
+(_vehProperties select 6) set [1, getNumber (configOf _veh >> "ace_rearm_defaultSupply")];
+
 private _EDENinventory = _veh getVariable ["btc_EDENinventory", []];
 
 btc_vehicles = btc_vehicles - [_veh];
@@ -48,10 +53,13 @@ if ((getVehicleCargo _veh) isNotEqualTo []) then {
     _veh setVehicleCargo objNull;
 };
 
+{
+    _x call btc_body_fnc_bagRecover_s;
+} forEach crew _veh;
+
 [{
     deleteVehicle _this;
 }, _veh] call CBA_fnc_execNextFrame;
 
-[{
-    _this call btc_log_fnc_createVehicle;
-}, [_type, [_x, _y, 0.5 + _z], _dir] + _vehProperties + [_EDENinventory], 1] call CBA_fnc_waitAndExecute;
+private _serialisedVeh = [_type, [_x, _y, 0.5 + _z], _dir] + _vehProperties + [_EDENinventory];
+[btc_log_fnc_createVehicle, _serialisedVeh, 1] call CBA_fnc_waitAndExecute;

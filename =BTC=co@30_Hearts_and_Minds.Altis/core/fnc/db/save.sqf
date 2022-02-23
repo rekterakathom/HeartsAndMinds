@@ -63,7 +63,7 @@ private _cities_status = [];
     if (btc_debug_log) then {
         [format ["ID %1 - IsOccupied %2", _x getVariable "id", _x getVariable "occupied"], __FILE__, [false]] call btc_debug_fnc_message;
     };
-} forEach (btc_city_all select {!(isNull _x)});
+} forEach (btc_city_all select {!isNull _x});
 profileNamespace setVariable [format ["btc_hm_%1_cities", _name], +_cities_status];
 
 //HIDEOUT
@@ -139,7 +139,12 @@ private _vehiclesNotInCargo = _vehicles select {
 };
 private _vehiclesInCargo = _vehicles - _vehiclesNotInCargo;
 {
-    (_x call btc_db_fnc_saveObjectStatus) params ["_type", "_pos", "_dir", "", "_cargo", "_inventory", "_vectorPos", "_isContaminated"];
+    (_x call btc_db_fnc_saveObjectStatus) params [
+        "_type", "_pos", "_dir", "", "_cargo",
+        "_inventory", "_vectorPos", "_isContaminated", "",
+        ["_flagTexture", "", [""]],
+        ["_turretMagazines", [], [[]]]
+    ];
 
     private _data = [];
     _data pushBack _type;
@@ -149,10 +154,12 @@ private _vehiclesInCargo = _vehicles - _vehiclesNotInCargo;
     _data pushBack (getAllHitPointsDamage _x);
     _data pushBack _cargo;
     _data pushBack _inventory;
-    _data append ([_x] call btc_fnc_getVehProperties);
+    _data append ([_x] call btc_veh_fnc_propertiesGet);
     _data pushBack (_x getVariable ["btc_EDENinventory", []]);
     _data pushBack _vectorPos;
     _data pushBack []; // ViV
+    _data pushBack _flagTexture;
+    _data pushBack _turretMagazines;
 
     private _fakeViV = isVehicleCargo attachedTo _x;
     if (
@@ -206,6 +213,25 @@ private _tags_properties = _tags apply {
     ]
 };
 profileNamespace setVariable [format ["btc_hm_%1_tags", _name], +_tags_properties];
+
+//Player respawn tickets
+if (btc_p_respawn_ticketsAtStart >= 0) then {
+    if (btc_p_respawn_ticketsShare) then {
+        btc_respawn_tickets set [str btc_player_side, [btc_player_side] call BIS_fnc_respawnTickets];
+    };
+    profileNamespace setVariable [format ["btc_hm_%1_respawnTickets", _name], +btc_respawn_tickets];
+
+    private _deadBodyPlayers = (btc_body_deadPlayers  - [objNull]) apply {[
+        typeOf _x,
+        getPosASL _x,
+        getDir _x,
+        getUnitLoadout _x,
+        _x call btc_body_fnc_dogtagGet,
+        _x in btc_chem_contaminated,
+        getForcedFlagTexture _x
+    ]};
+    profileNamespace setVariable [format ["btc_hm_%1_deadBodyPlayers", _name], +_deadBodyPlayers];
+};
 
 //Player Markers
 private _player_markers = allMapMarkers select {"_USER_DEFINED" in _x};

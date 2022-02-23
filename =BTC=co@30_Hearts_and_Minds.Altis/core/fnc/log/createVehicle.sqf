@@ -43,20 +43,19 @@ params [
     ["_isContaminated", false, [false]],
     ["_supplyVehicle", [], [[]]],
     ["_EDENinventory", [], [[]]],
-    ["_allHitPointsDamage", [], [[]]]
+    ["_allHitPointsDamage", [], [[]]],
+    ["_flagTexture", "", [""]]
 ];
 
 private _veh  = createVehicle [_type, ASLToATL _pos, [], 0, "CAN_COLLIDE"];
 _veh setDir _dir;
 _veh setPosASL _pos;
 
-[_veh, _customization, _isMedicalVehicle, _isRepairVehicle, _fuelSource, _pylons, _isContaminated, _supplyVehicle] call btc_fnc_setVehProperties;
+[_veh, _customization, _isMedicalVehicle, _isRepairVehicle, _fuelSource, _pylons, _isContaminated, _supplyVehicle] call btc_veh_fnc_propertiesSet;
 if (_EDENinventory isNotEqualTo []) then {
     _veh setVariable ["btc_EDENinventory", _EDENinventory];
     [_veh, _EDENinventory] call btc_log_fnc_inventorySet;
 };
-
-_veh setVariable ["btc_dont_delete", true];
 
 if (unitIsUAV _veh) then {
     createVehicleCrew _veh;
@@ -71,6 +70,10 @@ if (_allHitPointsDamage isNotEqualTo []) then {
     };
 };
 
-_veh call btc_db_fnc_add_veh;
+if (_flagTexture isNotEqualTo "") then {
+    _veh forceFlagTexture _flagTexture;
+};
+
+_veh call btc_veh_fnc_add;
 
 _veh

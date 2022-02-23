@@ -76,7 +76,7 @@ private _delay = switch (_random) do {
     case 1 : {
         _pos = [_pos, 0, 150, 10, false] call btc_fnc_findsafepos;
 
-        [_group, _pos, 5 + (round random 8)] call btc_mil_fnc_createUnits;
+        [_group, _pos, 5 + (round random 4)] call btc_mil_fnc_createUnits;
         0
     };
     case 2 : {
@@ -100,7 +100,7 @@ private _delay = switch (_random) do {
 
 [{
     _this call btc_patrol_fnc_init;
-    [[_this select 0]] call btc_fnc_set_groupsOwner;
-}, [_group, [_start_city, _active_city], _area, _pos_isWater], btc_delay_time + _delay] call CBA_fnc_waitAndExecute;
+    (_this select 0) setVariable ["acex_headless_blacklist", false];
+}, [_group, [_start_city, _active_city], _area, _pos_isWater], _delay] call btc_delay_fnc_waitAndExecute;
 
 true

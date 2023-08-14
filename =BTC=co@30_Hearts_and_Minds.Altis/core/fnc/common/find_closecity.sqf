@@ -15,7 +15,7 @@ Returns:
 
 Examples:
     (begin example)
-        _closer_city = [player, btc_city_all] call btc_fnc_find_closecity;
+        _closer_city = [player, values btc_city_all] call btc_fnc_find_closecity;
     (end)
 
 Author:
@@ -35,7 +35,7 @@ if (_isOccupied) then {
 } else {
     _city_all_distance = _array;
 };
-if (_city_all_distance isEqualTo []) exitWith {[]};
+if (_city_all_distance isEqualTo []) exitWith {objNull};
 
 _city_all_distance = _city_all_distance apply {[_x distance _obj, _x]};
 _city_all_distance sort true;

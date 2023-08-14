@@ -33,7 +33,13 @@ private _malus = [btc_rep_malus_building_damaged, btc_rep_malus_building_destroy
 private _skipCategories = false;
 
 // Accept only static, terrain buildings, discard any dynamically created ones but keep already damaged buildings.
-if ((getObjectType _from != 1) && !(_from in btc_buildings_changed)) exitWith {};
+if (
+    (getObjectType _from != 1) &&
+    !(_from in btc_buildings_changed) ||
+    {_classname isEqualTo ""} ||
+    {_classname isKindOf "Wall"} ||
+    {"GATE" in _classname}
+) exitWith {};
 
 btc_buildings_changed pushBack _to;
 
@@ -57,7 +63,7 @@ if (!_skipCategories) then {
 };
 
 if (btc_debug) then {
-    [format ["%1 to %2. Malus: %3", typeOf _from, typeOf _to, _malus], __FILE__, [btc_debug, false]] call btc_debug_fnc_message;
+    [format ["%1 to %2. Malus: %3", _classname, typeOf _to, _malus], __FILE__, [btc_debug, false]] call btc_debug_fnc_message;
 };
 
 _malus call btc_rep_fnc_change;

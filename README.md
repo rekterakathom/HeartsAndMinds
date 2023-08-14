@@ -21,8 +21,8 @@ Post war anti insurgency dynamic mission with focus on good relations with civil
 </p>
 
 <p align="center">
-    <a href="https://github.com/Vdauphin/HeartsAndMinds/releases/tag/1.22">
-        <img src="https://img.shields.io/badge/Version-1.22-blue.svg?style=flat-square" alt="H&M Version">
+    <a href="https://github.com/Vdauphin/HeartsAndMinds/releases/tag/1.23.4">
+        <img src="https://img.shields.io/badge/Version-1.23.4-blue.svg?style=flat-square" alt="H&M Version">
     </a>
     <a href="https://somsubhra.github.io/github-release-stats/?username=vdauphin&repository=HeartsAndMinds&page=1&per_page=300">
         <img src="https://img.shields.io/github/downloads/Vdauphin/HeartsAndMinds/total.svg?style=flat-square&label=Downloads" alt="H&M Downloads">
@@ -77,14 +77,14 @@ At the beginning you have a very low reputation level, so civilians won't help y
     - [Vehicle in vehicle](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#towing-system) extended
     - [Sling loading](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#sling-loading)
     - Repair [destroyed vehicles](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#respawn)
-    - [FOB/Rallypoints](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#fobrallypoint)
+    - [FOB/Rallypoints](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#respawn-position)
 - Gameplay elements
     - [Intel](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#intel) about cache and hideout
     - [Chemical Warfare](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#chemical-warfare)
     - [Spectrum devices](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#spectrum-devices)
 - Under the hood
     - A lot of optional gameplay
-    - More than 308 enemies and 27 civilians factions available
+    - More than 370 enemies and 28 civilians factions available
     - Full saving Database ([even player markers](http://vdauphin.github.io/HeartsAndMinds/InGame-documentation#headless--database))
     - Easy map change (See [here](http://vdauphin.github.io/HeartsAndMinds/Change-MAP-of-Hearts-and-Minds))
     - ACE Headless support

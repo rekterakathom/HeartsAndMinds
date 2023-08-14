@@ -36,9 +36,9 @@ private _failNotify = [
 if (_array isEqualTo []) exitWith {_failNotify call CBA_fnc_notify;};
 
 private _rearmSource = _array select 0;
-private _default_rearmCargo = getNumber (configOf _rearmSource >> "ace_rearm_defaultSupply");
+private _default_rearmCargo = _rearmSource getVariable ["btc_EDEN_defaultSupply", _rearmSource call ace_rearm_fnc_getSupplyCount];
 
 if (_default_rearmCargo <= 0) exitWith {_failNotify call CBA_fnc_notify;};
 
-[_rearmSource, _default_rearmCargo] call ace_rearm_fnc_makeSource;
-(localize "STR_ACE_Refuel_Hint_Completed") call CBA_fnc_notify;
+[_rearmSource, _default_rearmCargo] remoteExecCall ["ace_rearm_fnc_makeSource", 2];
+(localize "STR_BTC_HAM_LOG_REARM_COMPLETED") call CBA_fnc_notify;
